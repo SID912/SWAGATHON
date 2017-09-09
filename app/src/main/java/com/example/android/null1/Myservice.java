@@ -21,7 +21,7 @@ import java.util.Timer;
 
 public class Myservice extends Service{
     private Timer timer = new Timer();
-    String driverid;
+    String id;
     GPSTracker gps;
     Handler handler;
     int delay = 1000;
@@ -33,7 +33,7 @@ public class Myservice extends Service{
     }
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
-        driverid = intent.getStringExtra("Id");
+        id = intent.getStringExtra("Id");
         return START_STICKY;
     }
     @Override
@@ -78,7 +78,6 @@ public class Myservice extends Service{
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
-//                Log.w("Vl","as,ng");
             }
         }
 
@@ -86,7 +85,7 @@ public class Myservice extends Service{
             @Override
             protected Map<String,String > getParams(){
                 Map<String,String> params=new HashMap<String, String>();
-                params.put("driverid",driverid);
+                params.put("driverid",id);
                 params.put("currentlat",lat);
                 params.put("currentlong",lon);
                 return params;

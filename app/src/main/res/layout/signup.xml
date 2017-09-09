@@ -89,7 +89,16 @@
             android:inputType="number"
             android:textColor="#EC407A"/>
     </android.support.design.widget.TextInputLayout>
+    <Spinner
+        android:id="@+id/interest"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+    </Spinner>
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"

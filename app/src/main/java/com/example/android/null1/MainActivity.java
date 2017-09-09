@@ -12,7 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,15 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
     int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     EditText userid,password;
-    private ProgressBar spinner;
+    private Spinner spinner;
     GPSTracker gpss;
     Button Login;
+    TextView register;
+    String id,struserid,strpassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner.setVisibility(View.INVISIBLE);
         PackageManager pm = this.getPackageManager();
         int hasPerm = pm.checkPermission(
                 android.Manifest.permission.ACCESS_FINE_LOCATION, getPackageName());
@@ -52,38 +54,46 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).create().show();
             }
+        register = (TextView)findViewById(R.id.Signup);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent Reg = new Intent(MainActivity.this,Signup.class);
+                startActivity(Reg);
+            }
+        });
         Login = (Button)findViewById(R.id.Login_Button);
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 userid = (EditText)findViewById(R.id.Username);
                 password = (EditText)findViewById(R.id.Password);
-                login();
+                Intent chat=new Intent(MainActivity.this,ChatInterest.class);
+                chat.putExtra("id",userid.getText().toString());
+                startActivity(chat);
+                //login();
             }
         });
     }
     public void login() {
-        //progressDialog.setMessage("Logging you in...");
-//        TextView print = (TextView) findViewById(R.id.TEST);
+        struserid = userid.getText().toString();
+        strpassword = password.getText().toString();
         String cancel_req_tag = "LOGIN";
         String URL_FOR_LOGIN = "http://165.227.97.128:8000/request/driverlogin";
-        spinner.setVisibility(View.VISIBLE);
         StringRequest streq = new StringRequest(Request.Method.POST, URL_FOR_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                 try {
                     JSONObject Json = new JSONObject(response);
-                    driverid = Json.getString("driverId");
+                    id = Json.getString("id");
                     Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_SHORT).show();
                     Intent service = new Intent(MainActivity.this,Myservice.class);
-                    service.putExtra("driverid",userno);
+                    service.putExtra("id",id);
                     startService(service);
-                    inte.putExtra("driverid",driverid);
-                    startActivity(inte);
+                    Intent chat=new Intent(MainActivity.this,ChatInterest.class);
+                    startActivity(chat);
                 } catch (JSONException e) {
-                    //do something
-                    spinner.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this, "failed to Sign in Try again or Signup", Toast.LENGTH_LONG).show();
                 }
             }
@@ -91,19 +101,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(MainActivity.this,"Failed to Sign in Try again or Signup",Toast.LENGTH_LONG).show();
-                spinner.setVisibility(View.GONE);//
                 Log.e("MainActivity","ERROR"+ error.getMessage());
-//                hideDiaolog();
-
             }
 
         }){
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String ,String>();
-                params.put("username",Strusername);
-                params.put("password",Strpassword);
-//                System.out.print(Strusername+Strpassword);
+                params.put("id",struserid);
+                params.put("password",strpassword);
                 return params;
             }
         };
