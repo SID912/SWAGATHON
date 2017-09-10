@@ -40,17 +40,16 @@ public class MessageAdapter extends ArrayAdapter<FriendlyMessage> {
                     .load(message.getPhotoUrl())
                     .into(photoImageView);
         }
-        if(!message.getName().equals("Tech"))
-        {
-            photoImageView.setVisibility(View.GONE);
-            messageTextView.setVisibility(View.GONE);
-            authorTextView.setVisibility(View.GONE);
-        }
-        else {
+        if(message.getInterest().equals(Global.b)) {
             messageTextView.setVisibility(View.VISIBLE);
             photoImageView.setVisibility(View.GONE);
             messageTextView.setText(message.getText());
             authorTextView.setText(message.getName());
+        }
+        else{
+            messageTextView.setVisibility(View.GONE);
+            photoImageView.setVisibility(View.GONE);
+            authorTextView.setVisibility(View.GONE);
         }
 
         return convertView;

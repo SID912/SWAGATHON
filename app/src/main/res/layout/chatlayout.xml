@@ -28,11 +28,11 @@
         android:layout_alignParentStart="true"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:id="@+id/SOS"
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:text="SOS" />
+            android:layout_height="64dp"
+            android:src = "@drawable/assets2"/>
 
         <EditText
             android:id="@+id/messageEditText"
@@ -48,8 +48,18 @@
             android:layout_gravity="bottom"
             android:enabled="false"
             android:text="SEND"/>
-
     </LinearLayout>
+    <Button
+        android:id = "@+id/Safety"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:text="Safety"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_alignParentTop="true"
+        android:background="#EF6C00"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -58,4 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
+
+
 </RelativeLayout>

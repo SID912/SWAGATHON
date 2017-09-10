@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +23,9 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     EditText userid,password;
-    private Spinner spinner;
+    String name,interest;
     GPSTracker gpss;
     Button Login;
     TextView register;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        Toast.makeText(MainActivity.this,""+dateFormat.format(date),Toast.LENGTH_LONG).show();
         PackageManager pm = this.getPackageManager();
         int hasPerm = pm.checkPermission(
                 android.Manifest.permission.ACCESS_FINE_LOCATION, getPackageName());
@@ -68,10 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 userid = (EditText)findViewById(R.id.Username);
                 password = (EditText)findViewById(R.id.Password);
-                Intent chat=new Intent(MainActivity.this,ChatInterest.class);
-                chat.putExtra("id",userid.getText().toString());
-                startActivity(chat);
-                //login();
+                login();
             }
         });
     }
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         struserid = userid.getText().toString();
         strpassword = password.getText().toString();
         String cancel_req_tag = "LOGIN";
-        String URL_FOR_LOGIN = "http://165.227.97.128:8000/request/driverlogin";
+        String URL_FOR_LOGIN = "http://13.126.238.174:8000/home/userlogin";
         StringRequest streq = new StringRequest(Request.Method.POST, URL_FOR_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -87,11 +89,16 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject Json = new JSONObject(response);
                     id = Json.getString("id");
+                    interest = Json.getString("interest");
+                    name = Json.getString("name");
                     Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_SHORT).show();
                     Intent service = new Intent(MainActivity.this,Myservice.class);
                     service.putExtra("id",id);
                     startService(service);
                     Intent chat=new Intent(MainActivity.this,ChatInterest.class);
+                    chat.putExtra("name",name);
+                    chat.putExtra("id",id);
+                    chat.putExtra("interest",interest);
                     startActivity(chat);
                 } catch (JSONException e) {
                     Toast.makeText(MainActivity.this, "failed to Sign in Try again or Signup", Toast.LENGTH_LONG).show();

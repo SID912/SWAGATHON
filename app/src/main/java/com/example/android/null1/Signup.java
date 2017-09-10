@@ -30,7 +30,7 @@ public class Signup extends AppCompatActivity{
     EditText name,password,userid,phone;
     Button Signup;
     private Spinner spinner;
-    private static final String[]interest ={"Work from home","Tech"};
+    private static final String[]interest ={"Fashion","Tech","Science","Literature"};
     String strinterest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,37 +66,35 @@ public class Signup extends AppCompatActivity{
     public void register(final String strname,final String strpassword,final String struserid,final String strphone)
     {
         String cancel_req_tag = "LOGIN";
-        String URL_FOR_LOGIN = "http://165.227.97.128:8000/request/driverlogin";
+        String URL_FOR_LOGIN = "http://13.126.238.174:8000/home/userregister";
         spinner.setVisibility(View.VISIBLE);
         StringRequest streq = new StringRequest(Request.Method.POST, URL_FOR_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                 try {
                     JSONObject Json = new JSONObject(response);
-                    Toast.makeText(Signup.this,"Success",Toast.LENGTH_SHORT).show();
+                    String res = Json.getString("success");
                     Intent intent = new Intent(Signup.this,MainActivity.class);
                     startActivity(intent);
                 } catch (JSONException e) {
-                    spinner.setVisibility(View.GONE);
-                    Toast.makeText(Signup.this,"Unsuccessful",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Signup.this,"Username alredy exists",Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(Signup.this,"Unsuccessful",Toast.LENGTH_LONG).show();
-                spinner.setVisibility(View.GONE);//
             }
 
         }){
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String ,String>();
-                params.put("name",struserid);
+                params.put("name",strname);
                 params.put("password",strpassword);
                 params.put("userid",struserid);
                 params.put("phone",strphone);
+                params.put("interest",strinterest);
                 return params;
             }
         };

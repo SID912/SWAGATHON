@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,10 +20,10 @@ import java.util.Timer;
 
 public class Myservice extends Service{
     private Timer timer = new Timer();
-    String id;
+    String id,name,interest;
     GPSTracker gps;
     Handler handler;
-    int delay = 1000;
+    int delay = 5*1000;
 
     @Override
     public IBinder onBind(Intent arg0)
@@ -33,7 +32,9 @@ public class Myservice extends Service{
     }
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
-        id = intent.getStringExtra("Id");
+        id = intent.getStringExtra("id");
+        name=intent.getStringExtra("name");
+        interest = intent.getStringExtra("interest");
         return START_STICKY;
     }
     @Override
@@ -47,7 +48,7 @@ public class Myservice extends Service{
                 gps = new GPSTracker(Myservice.this);
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
-                Toast.makeText(Myservice.this,latitude+"  "+longitude,Toast.LENGTH_LONG).show();
+                sendRequest();
                 handler.postDelayed(this, delay);
             }
         }, delay);
@@ -63,17 +64,13 @@ public class Myservice extends Service{
         gps = new GPSTracker(Myservice.this);
         double latitude = gps.getLatitude();
         double longitude = gps.getLongitude();
-       Toast.makeText(Myservice.this,latitude+longitude +" ",Toast.LENGTH_LONG).show();
         final String lat = Double.toString(latitude);
         final String lon = Double.toString(longitude);
-
         String cancel_req_tag = "location";
-//        Toast.makeText(Myservice.this,"Your Location is - \nLat: " + latitude + "\nLong: "+ longitude+" "+driverid,Toast.LENGTH_SHORT).show();
-        String URL = "http://165.227.97.128:8000/request/locationupdate";
+        String URL = "http://13.126.238.174:8000/home/locationupdate";
         StringRequest strreq = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
             }
         },new Response.ErrorListener(){
             @Override
@@ -85,7 +82,7 @@ public class Myservice extends Service{
             @Override
             protected Map<String,String > getParams(){
                 Map<String,String> params=new HashMap<String, String>();
-                params.put("driverid",id);
+                params.put("id",id);
                 params.put("currentlat",lat);
                 params.put("currentlong",lon);
                 return params;

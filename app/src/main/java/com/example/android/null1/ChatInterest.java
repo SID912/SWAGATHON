@@ -1,5 +1,13 @@
 package com.example.android.null1;
 
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -8,18 +16,28 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Siddharth  Singh on 09/09/2017.
@@ -27,37 +45,51 @@ import java.util.List;
 
 public class ChatInterest extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
-    public static final String ANONYMOUS = "Tech";
-    public String interest="Tech";
+    public String interest,id;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
 
     private ListView mMessageListView;
     private MessageAdapter mMessageAdapter;
     private ProgressBar mProgressBar;
-    private TextView mPhotoPickerButton;
+    private ImageView mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
     private String mUsername;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessagesDatabaseReference;
     private ChildEventListener mChildEventListener;
+    Button safety;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatlayout);
 
-        mUsername = ANONYMOUS;
-
         // Initialize references to views
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        Bundle intent =getIntent().getExtras();
+        id = intent.getString("id");
+        mUsername = intent.getString("name");
+        interest = intent.getString("interest");
+        safety = (Button)findViewById(R.id.Safety);
+        safety.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent safe = new Intent(ChatInterest.this,Safety.class);
+                safe.putExtra("id",id);
+                safe.putExtra("name",mUsername);
+                safe.putExtra("interest",interest);
+                startActivity(safe);
+            }
+        });
+
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("message");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageListView = (ListView) findViewById(R.id.messageListView);
-        mPhotoPickerButton = (TextView) findViewById(R.id.SOS);
+        mPhotoPickerButton = (ImageView)findViewById(R.id.SOS);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
+        Global.b =interest;
         // Initialize message ListView and its adapter
         List<FriendlyMessage> friendlyMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages);
@@ -70,7 +102,20 @@ public class ChatInterest extends AppCompatActivity {
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Fire an intent to show an image picker
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    CameraManager camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                    String cameraId = null; // Usually back camera is at 0 position.
+                    try {
+                        cameraId = camManager.getCameraIdList()[0];
+                        camManager.setTorchMode(cameraId, true);   //Turn ON
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+                requesthelp();
             }
         });
 
@@ -99,7 +144,7 @@ public class ChatInterest extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FriendlyMessage friendlyMessage = new FriendlyMessage(mMessageEditText.getText().toString(), mUsername,null);
+                FriendlyMessage friendlyMessage = new FriendlyMessage(mMessageEditText.getText().toString(), mUsername,null,interest);
                 mMessagesDatabaseReference.push().setValue(friendlyMessage);
                 mMessageEditText.setText("");
             }
@@ -128,6 +173,34 @@ public class ChatInterest extends AppCompatActivity {
             }
         };
         mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
+    }
+    public void requesthelp() {
+        String cancel_req_tag = "SOS";
+        String URL_FOR_LOGIN = "http://13.126.238.174:8000/home/sos";
+        StringRequest streq = new StringRequest(Request.Method.POST, URL_FOR_LOGIN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject Json = new JSONObject(response);
+                    Toast.makeText(ChatInterest.this,"Sent",Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+        }){
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<String ,String>();
+                params.put("id",id);
+                return params;
+            }
+        };
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(streq, cancel_req_tag);
     }
 
     }

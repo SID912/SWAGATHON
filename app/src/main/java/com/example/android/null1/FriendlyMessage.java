@@ -8,25 +8,29 @@ public class FriendlyMessage {
 
     private String text;
     private String name;
+    private String interest;
     private String photoUrl;
 
     public FriendlyMessage() {
     }
 
-    public FriendlyMessage(String text, String name, String photoUrl) {
+    public FriendlyMessage(String text, String name, String photoUrl,String interest) {
         this.text = text;
         this.name = name;
+        this.interest = interest;
         this.photoUrl = photoUrl;
     }
 
     public String getText() {
         return text;
     }
+    public String getInterest(){
+        return interest;
+    }
 
     public void setText(String text) {
         this.text = text;
     }
-
     public String getName() {
             return name;
     }

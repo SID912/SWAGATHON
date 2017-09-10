@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share This Otp Only With Your Trusted Contacts"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:textColor="#EF6C00"/>
+    <TextView
+        android:id = "@+id/Otp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:text = "123456"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="#EF6C00"
+        android:textSize="90dp"/>
+
+</LinearLayout>

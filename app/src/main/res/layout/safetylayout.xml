@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id ="@+id/test"
-        android:layout_gravity="center"
-        android:textSize="70dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text= "Message"
-        android:layout_marginBottom="16dp"/>
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
     <EditText
+        android:layout_marginTop="20dp"
         android:id = "@+id/message"
         android:inputType="textMultiLine"
-        android:minLines="13"
+        android:minLines="12"
         android:gravity="top|left"
         android:maxLines="10"
+        android:textSize="24dp"
+        android:textColor="#EF6C00"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:scrollbars="vertical"
         android:layout_marginRight="24dp"
         android:layout_marginLeft="24dp"
-        android:background="@drawable/border"
+        android:background="@android:color/transparent"
         />
 
     <Button
@@ -32,19 +29,29 @@
         android:layout_gravity="center"
         android:textStyle="bold"
         android:text="Send"
-        android:background="#EC407A"
+        android:background="#EF6C00"
         android:textColor="#FFFF"
         android:textAllCaps="true"
         android:textSize="30dp"/>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/SOS2"
+        android:layout_width="188dp"
+        android:layout_height="138dp"
+        android:src="@drawable/assets2"
+        android:textSize="29dp" />
+
     <TextView
-
-        android:layout_gravity="center"
-        android:id = "@+id/SOS2"
-        android:layout_width="wrap_content"
+        android:id="@+id/otp"
+        android:layout_width="137dp"
         android:layout_height="wrap_content"
-        android:text= "Check"
-        android:textSize="29dp"
+        android:layout_gravity="center"
+        android:text="Get Otp"
+        android:textSize="30dp"
         />
-
+</LinearLayout>
 
 </LinearLayout>

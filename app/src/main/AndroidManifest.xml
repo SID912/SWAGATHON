@@ -34,6 +34,7 @@
         <activity android:name=".ChatInterest"/>
         <activity android:name=".Safety"/>
         <activity android:name=".Signup"/>
+        <activity android:name=".Otp"/>
     </application>
 
 </manifest>

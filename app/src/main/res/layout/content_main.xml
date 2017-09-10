@@ -11,22 +11,28 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Sign In"
-            android:textSize="20dp"
-            android:textColor="#FFFF"
-            android:gravity="center"
-            android:background="#EC407A"/>
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/asset4100"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"/>
+
+        <ImageView
+            android:layout_width="361dp"
+            android:layout_height="100dp"
+            android:src="@drawable/asset3100"/>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17">
             <EditText
                 android:id="@+id/Username"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="58dp"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="26dp"
                 android:inputType="textEmailAddress"
@@ -46,7 +52,7 @@
             <EditText
                 android:id="@+id/Password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:hint="Password"
                 android:textColor="#52B26E"
                 android:inputType="textPassword" />
@@ -60,17 +66,12 @@
             android:layout_gravity="center"
             android:textStyle="bold"
             android:text="Login"
-            android:background="#EC407A"
+            android:background="#EF6C00"
             android:textColor="#FFFF"
             android:textAllCaps="true"
-            android:textSize="30dp"
+            android:textSize="25dp"
+            android:layout_marginBottom="8dp"
 
-            />
-        <ProgressBar
-            android:id="@+id/ProgressSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             />
         <TextView
             android:id="@+id/Signup"
